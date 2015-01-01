@@ -1,4 +1,4 @@
-https://travis-ci.org/0x19/tldtosms.svg
+[![Build Status](https://travis-ci.org/0x19/gofo.svg)](https://travis-ci.org/0x19/gofo)
 
 HTTP Fan Out Server written in Go
 ====
