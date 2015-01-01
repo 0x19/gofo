@@ -9,7 +9,12 @@ This is quite useful if you need to listen for callbacks from external service i
 
 ### Running behind NAT?
 
-Well that's easy today :) You can always use [Ngrok](https://ngrok.com/)! It's free can very efficiently tunnel out your local machine. As well written in [Go](https://golang.org/)
+Well that's easy today :) You can always use [Ngrok](https://ngrok.com/)! It's free and can for sure can very efficiently tunnel out your local machine. As well written in [Go](https://golang.org/)
+
+
+### Issues?
+
+Please reach me over nevio.vesic@gmail.com or submit new Issue. I'd prefer tho if you would submit issue.
 
 ### Example
 
