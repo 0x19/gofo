@@ -1,3 +1,5 @@
+https://travis-ci.org/0x19/tldtosms.svg
+
 HTTP Fan Out Server written in Go
 ====
 HTTP fan-out server. What it does is very simple. It listens any incoming HTTP packets on registered uri (rule) and forwards what it gets to attached recipients (out).
