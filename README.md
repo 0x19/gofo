@@ -2,14 +2,20 @@
 
 HTTP Fan Out Server written in Go
 ====
-HTTP fan-out server. What it does is very simple. It listens any incoming HTTP packets on registered uri (rule) and forwards what it gets to attached recipients (out).
+What it does is very simple. It listens for incoming HTTP requests on registered uri (-in) and forwards what it gets to registered listeners (-out).
 
 This is quite useful if you need to listen for callbacks from external service if same one does not support notifying your application on multiple urls.
+
+Whenever you start service it will give you full url that you can just copy and paste to external service.
+
+```shell
+2015/01/01 17:35:01 Listen ▶ NOTICE  You can pass following URL to external service: http://127.0.0.1:9991/callbacks/sms
+```
 
 
 ### Running behind NAT?
 
-Well that's easy today :) You can always use [Ngrok](https://ngrok.com/)! It's free and can for sure can very efficiently tunnel out your local machine. As well written in [Go](https://golang.org/)
+Well that's easy today :) You can always use [Ngrok](https://ngrok.com/)! It's free and can for sure very efficiently tunnel out your local machine. As well written in [Go](https://golang.org/)
 
 
 ### Issues?
