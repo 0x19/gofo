@@ -8,9 +8,12 @@ import (
 	"net/url"
 	"strings"
 	"regexp"
+	"errors"
 )
 
-type Service struct {}
+type Service struct {
+	Rules []string
+}
 
 func(s *Service) processForwarder(furl *url.URL, req *http.Request) {
 	log.Debug("Processing forwarder: %s", furl)
@@ -80,16 +83,36 @@ func(s *Service) prepareForwarders(fwds string) []*url.URL {
 	return forwarders
 }
 
-func(s *Service) AttachHttpRule(rule string, fwds string) {
+// Will parse rule and assign it to the struct. If however is not valid will raise error saying same
+func(s *Service) ParseRule(rule string) (string, error) {
 	if !strings.HasPrefix(rule, "/") {
 		rule = fmt.Sprintf("/%s", rule)
 	}
 
+	rxAn := regexp.MustCompile("^[a-zA-Z0-9-_/.]+$") // AlphaNumeric + _ and -
+
+	if !rxAn.MatchString(rule) {
+		return rule, errors.New("Rule contains illegal characters. Accepted: a-z A-Z 0-9 - _ / and .")
+	}
+
+	return rule, nil
+}
+
+func(s *Service) AttachHttpRule(rule string, fwds string) {
+
 	forwarders := s.prepareForwarders(fwds)
 	log.Debug("Attaching new rule: %s -> %s", rule, forwarders)
 
-	http.HandleFunc(rule, func(w http.ResponseWriter, r *http.Request) {
+	for _, r := range s.Rules {
+		if r == rule {
+			log.Debug("Requested rule is already attached. You cannot re-attach already attached rule: %s", rule)
+			return
+		}
+	}
 
+	s.Rules = append(s.Rules, rule)
+
+	http.HandleFunc(rule, func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
 			fmt.Fprintf(w, "error parsing form.")
 			return
@@ -100,16 +123,10 @@ func(s *Service) AttachHttpRule(rule string, fwds string) {
 		for _, forwarder := range forwarders {
 			go s.processForwarder(forwarder, r)
 		}
-		
 	})
 }
 
 func(s *Service) Listen(host string, port int, rule string) {
-
-	if !strings.HasPrefix(rule, "/") {
-		rule = fmt.Sprintf("/%s", rule)
-	}
-
 	log.Notice("Listening for new incoming connections %s:%d", host, port)
 	log.Notice("You can pass following URL to external service: http://%s:%d%s", host, port, rule)
 	http.ListenAndServe(fmt.Sprintf("%s:%d", host, port), nil)
