@@ -15,8 +15,8 @@ type Service struct {
 	Rules []string
 }
 
-func(s *Service) processUrl(furl *url.URL, req *http.Request) {
-	log.Debug("Processing forwarder: %s", furl)
+func(s *Service) handleUrl(furl *url.URL, req *http.Request) {
+	log.Debug("About to handle url: %s", furl)
 
 	fullUrl := furl.String()
 	var body io.Reader
@@ -123,7 +123,7 @@ func(s *Service) AttachHttpRule(rule string, out string) {
 		fmt.Fprintf(w, "OK")
 
 		for _, url := range urls {
-			go s.processUrl(url, r)
+			go s.handleUrl(url, r)
 		}
 	})
 }
