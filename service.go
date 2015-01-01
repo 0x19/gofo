@@ -101,7 +101,7 @@ func(s *Service) ParseRule(rule string) (string, error) {
 }
 
 // Will attach rule and its urls and prepare for listening
-func(s *Service) AttachHttpRule(rule string, out string) {
+func(s *Service) HandleFanRequest(rule string, out string) {
 
 	urls := s.parseUrls(out)
 	log.Debug("Attaching new rule: %s -> %s", rule, urls)

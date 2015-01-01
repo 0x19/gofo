@@ -11,7 +11,7 @@ var (
 	host = flag.String("host", "0.0.0.0", "Host to listen on")
 	port = flag.Int("port", 8070, "Port to listen on")
 	services = flag.String("services", "http", "List of fanout services that should be started up")
-	rule = flag.String("in", "", "Rule that will be registered as server uri on which we will listen for requests")
+	in = flag.String("in", "", "Rule that will be registered as server uri on which we will listen for requests")
 	urls = flag.String("out", "", "List of URLS separated by comma. Same will receive http request received at rule")
 )
 
@@ -22,7 +22,7 @@ func main() {
 
 	service := Service{}
 
-	callbackUri, err := service.ParseRule(*rule); if err != nil {
+	uri, err := service.ParseRule(*in); if err != nil {
 		log.Error("Error while parsing rule: %s", err.Error())
 		return
 	}
@@ -33,6 +33,6 @@ func main() {
 		return
 	}
 
-	service.AttachHttpRule(callbackUri, *urls)
-	service.Listen(*host, *port, callbackUri)
+	service.HandleFanRequest(uri, *urls)
+	service.Listen(*host, *port, uri)
 }

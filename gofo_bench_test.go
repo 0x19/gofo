@@ -21,7 +21,7 @@ func BenchmarkCallback(b *testing.B) {
 		b.Fatal("Failure could not parse rule: ", err.Error())
 	}
 
-	service.AttachHttpRule(callbackUri, ts.URL)
+	service.HandleFanRequest(callbackUri, ts.URL)
 	go service.Listen("0.0.0.0", 8657, callbackUri)
 
 	time.Sleep(1*time.Second)

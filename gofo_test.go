@@ -42,7 +42,7 @@ func TestCallback(t *testing.T) {
 		t.Fatal("Failure could not parse rule: ", err.Error())
 	}
 
-	service.AttachHttpRule(callbackUri, ts.URL)
+	service.HandleFanRequest(callbackUri, ts.URL)
 	go service.Listen("0.0.0.0", 8657, callbackUri)
 
 	nreq, err := http.NewRequest("GET", "http://127.0.0.1:8657/callbacks/go?test=ok", nil)
