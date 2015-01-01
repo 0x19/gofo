@@ -8,7 +8,7 @@ Just pass to external service generated url and bind your multiple urls. Once ex
 
 ### Running behind NAT?
 
-Well that's easy now days :) You can always use [Ngrok](https://ngrok.com/)! It's free can very efficiently tunnel out your local machine. As well written in [Go](https://golang.org/)
+Well that's easy today :) You can always use [Ngrok](https://ngrok.com/)! It's free can very efficiently tunnel out your local machine. As well written in [Go](https://golang.org/)
 
 ### Example
 
