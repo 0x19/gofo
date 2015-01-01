@@ -2,7 +2,7 @@
 
 HTTP Fan Out Server written in Go
 ====
-What it does is very simple. It listens for incoming HTTP requests on registered uri (-in) and forwards what it gets to attached recipients (-out).
+What it does is very simple. It listens for incoming HTTP requests on registered uri (-in) and forwards what it gets to registered listeners (-out).
 
 This is quite useful if you need to listen for callbacks from external service if same one does not support notifying your application on multiple urls.
 
