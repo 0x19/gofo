@@ -1,9 +1,8 @@
-Go HTTP Fan Out
+HTTP Fan Out Server written in Go
 ====
-HTTP callback forwarder / fan-out. What it does is very simple. It listens any incoming HTTP packets on one uri and forwards what it gets to attached recipients.
+HTTP fan-out server. What it does is very simple. It listens any incoming HTTP packets on registered uri (rule) and forwards what it gets to attached recipients (out).
 
-This is quite useful if you need to listen for callbacks from external service which does not support notifying your application on multiple urls.
-Just pass to external service generated url and bind your multiple urls. Once external service reaches generated url, attached urls will be instantly notified.
+This is quite useful if you need to listen for callbacks from external service if same one does not support notifying your application on multiple urls.
 
 
 ### Running behind NAT?
