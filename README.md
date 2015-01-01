@@ -1,6 +1,6 @@
-GoMany
+Go HTTP Fan Out
 ====
-HTTP callback forwarder. What it does is very simple. It listens any incoming HTTP packets on one uri and forwards what it gets to attached recipients.
+HTTP callback forwarder / fan-out. What it does is very simple. It listens any incoming HTTP packets on one uri and forwards what it gets to attached recipients.
 
 This is quite useful if you need to listen for callback from some external service which does not support notifying your application on multiple urls. 
 Just pass to same external service generated url and bind your multiple urls. Once external service reaches generated url, attached urls will be instantly notified.
