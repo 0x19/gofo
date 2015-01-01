@@ -1,0 +1,4 @@
+langugage: go
+
+go:
+	- 1.3
