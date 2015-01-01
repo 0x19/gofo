@@ -15,7 +15,7 @@ type Service struct {
 	Rules []string
 }
 
-func(s *Service) processForwarder(furl *url.URL, req *http.Request) {
+func(s *Service) processUrl(furl *url.URL, req *http.Request) {
 	log.Debug("Processing forwarder: %s", furl)
 
 	fullUrl := furl.String()
@@ -47,10 +47,11 @@ func(s *Service) processForwarder(furl *url.URL, req *http.Request) {
 	    panic(err)
 	}
 
-	log.Info("Forwarder response status: %q", resp.Status)
-    log.Info("Forwarder response headers: %s", resp.Header)
+	log.Debug("Forwarder response status: %q", resp.Status)
+    log.Debug("Forwarder response headers: %s", resp.Header)
 }
 
+// Will check whenever given url is in fact url
 func(s *Service) isURL(url string) bool {
 	if url == "" || len(url) >= 2083 || len(url) < 10 {
 		return false
@@ -60,27 +61,28 @@ func(s *Service) isURL(url string) bool {
 	return rxURL.MatchString(url)
 }
 
-func(s *Service) prepareForwarders(fwds string) []*url.URL {
-	forwarders := make([]*url.URL, 0)
+// Will parse url and append to the slice
+func(s *Service) parseUrls(out string) []*url.URL {
+	urls := make([]*url.URL, 0)
 
-	for _, forwarder := range strings.Split(fwds, ",") {
-		forwarder = strings.Trim(forwarder, " ")
-		log.Debug("Validating attached forwarder: %s", forwarder)
+	for _, fw := range strings.Split(out, ",") {
+		fw = strings.Trim(fw, " ")
+		log.Debug("Validating attached forwarder: %s", fw)
 
-		if !s.isURL(forwarder) {
-			panic(fmt.Errorf("Hola, passed forwarder `%s` is not valid url! Only valid urls can be attached as forwarders.", forwarder))
+		if !s.isURL(fw) {
+			panic(fmt.Errorf("Hola, passed forwarder `%s` is not valid url! Only valid urls can be attached.", fw))
 		}
 
-		urlfwd, err := url.Parse(forwarder)
+		pfw, err := url.Parse(fw)
 
 		if err != nil {
 			panic(err)
 		}
 
-		forwarders = append(forwarders, urlfwd)
+		urls = append(urls, pfw)
 	}
 
-	return forwarders
+	return urls
 }
 
 // Will parse rule and assign it to the struct. If however is not valid will raise error saying same
@@ -98,15 +100,15 @@ func(s *Service) ParseRule(rule string) (string, error) {
 	return rule, nil
 }
 
-func(s *Service) AttachHttpRule(rule string, fwds string) {
+// Will attach rule and its urls and prepare for listening
+func(s *Service) AttachHttpRule(rule string, out string) {
 
-	forwarders := s.prepareForwarders(fwds)
-	log.Debug("Attaching new rule: %s -> %s", rule, forwarders)
+	urls := s.parseUrls(out)
+	log.Debug("Attaching new rule: %s -> %s", rule, urls)
 
 	for _, r := range s.Rules {
 		if r == rule {
-			log.Debug("Requested rule is already attached. You cannot re-attach already attached rule: %s", rule)
-			return
+			panic(fmt.Sprintf("Requested rule is already attached. You cannot re-attach already attached rule: %s", rule))
 		}
 	}
 
@@ -120,12 +122,13 @@ func(s *Service) AttachHttpRule(rule string, fwds string) {
 
 		fmt.Fprintf(w, "OK")
 
-		for _, forwarder := range forwarders {
-			go s.processForwarder(forwarder, r)
+		for _, url := range urls {
+			go s.processUrl(url, r)
 		}
 	})
 }
 
+// Will nuke mother fu**er!
 func(s *Service) Listen(host string, port int, rule string) {
 	log.Notice("Listening for new incoming connections %s:%d", host, port)
 	log.Notice("You can pass following URL to external service: http://%s:%d%s", host, port, rule)

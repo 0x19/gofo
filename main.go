@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"github.com/op/go-logging"
-	_ "github.com/0x19/gofo/fanouts"
 )
 
 var (
@@ -24,7 +23,14 @@ func main() {
 	service := Service{}
 
 	callbackUri, err := service.ParseRule(*rule); if err != nil {
-		panic(err)
+		log.Error("Error while parsing rule: %s", err.Error())
+		return
+	}
+
+	// I guess if url is smaller than 10 same means that it's smaller than http://t.t
+	if len(*urls) < 10 {
+		log.Error("You need to provide valid urls into out in order to start service!")
+		return
 	}
 
 	service.AttachHttpRule(callbackUri, *urls)
