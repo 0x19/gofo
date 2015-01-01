@@ -2,8 +2,15 @@ Go HTTP Fan Out
 ====
 HTTP callback forwarder / fan-out. What it does is very simple. It listens any incoming HTTP packets on one uri and forwards what it gets to attached recipients.
 
-This is quite useful if you need to listen for callback from some external service which does not support notifying your application on multiple urls. 
-Just pass to same external service generated url and bind your multiple urls. Once external service reaches generated url, attached urls will be instantly notified.
+This is quite useful if you need to listen for callbacks from external service which does not support notifying your application on multiple urls.
+Just pass to external service generated url and bind your multiple urls. Once external service reaches generated url, attached urls will be instantly notified.
+
+
+### Running behind NAT?
+
+Well that's easy now days :) You can always use [Ngrok](https://ngrok.com/)! It's free can very efficiently tunnel out your local machine. As well written in [Go](https://golang.org/)
+
+### Example
 
 
 ```shell
