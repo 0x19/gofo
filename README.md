@@ -1,4 +1,4 @@
-[![License][http://img.shields.io/badge/license-MIT-blue.svg?style=flat]][LICENSE]
+[![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)]()
 [![Build Status](https://travis-ci.org/0x19/gofo.svg)](https://travis-ci.org/0x19/gofo)
 
 HTTP Fan Out Server written in Go
